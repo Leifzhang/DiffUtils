@@ -12,7 +12,7 @@ import java.util.ArrayList
 class MainActivity : AppCompatActivity() {
     private var items: ArrayList<TestEntity>? = null
     private val diffHelper: DiffHelper = DiffHelper()
-
+    var count = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,9 +31,10 @@ class MainActivity : AppCompatActivity() {
             items = ArrayList()
         }
         var count = 0
+        val itemSize = items?.size
         while (count < 20) {
             val entity = TestEntity()
-            entity.id = items?.size?.plus(count) ?: 0
+            entity.id = itemSize?.plus(count) ?: 0
             count++
             items?.add(entity)
         }
