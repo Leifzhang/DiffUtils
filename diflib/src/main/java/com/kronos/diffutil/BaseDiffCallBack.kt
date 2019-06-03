@@ -3,9 +3,7 @@ package com.kronos.diffutil
 import android.text.TextUtils
 import androidx.recyclerview.widget.DiffUtil
 
-class BaseDiffCallBack(oldData: List<Any>?, newData: List<Any>?) : DiffUtil.Callback() {
-    private val oldData: List<Any>? = oldData
-    private val newData: List<Any>? = newData
+class BaseDiffCallBack(private val oldData: List<*>?, private val newData: List<*>?) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldData?.size ?: 0
