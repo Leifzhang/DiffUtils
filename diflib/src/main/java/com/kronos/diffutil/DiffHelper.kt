@@ -4,6 +4,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
+import java.util.*
+
 
 class DiffHelper {
     private var itemsCursor: MutableList<*>? = null
@@ -16,8 +18,6 @@ class DiffHelper {
         if (mData == null) {
             mData = mutableListOf()
         }
-        // notifyItemChanged()
-        //  copyData()
         notifyItemChanged()
     }
 
@@ -96,6 +96,7 @@ class DiffHelper {
 
     }
 
+    @Synchronized
     fun notifyItemChanged() {
         diffUtils()
     }
@@ -121,9 +122,8 @@ class DiffHelper {
             }
 
             override fun onMoved(fromPosition: Int, toPosition: Int) {
-                //   copyData()
+                swap(fromPosition, toPosition)
                 callBack?.onMoved(fromPosition, toPosition)
-                //   mAdapter.notifyItemMoved(fromPosition + mAdapter.getHeadViewSize(), toPosition + mAdapter.getHeadViewSize())
             }
 
             override fun onChanged(position: Int, count: Int, payload: Any?) {
@@ -133,6 +133,19 @@ class DiffHelper {
                 callBack?.onChanged(position, count, payload)
             }
         })
+    }
+
+    fun swap(oldPosition: Int, newPosition: Int) {
+        if (oldPosition < newPosition) {
+            for (i in oldPosition until newPosition) {
+                Collections.swap(mData, i, i + 1)
+            }
+        }
+        if (oldPosition > newPosition) {
+            for (i in oldPosition downTo newPosition + 1) {
+                Collections.swap(mData, i, i - 1)
+            }
+        }
     }
 
     fun getItemSize(): Int {

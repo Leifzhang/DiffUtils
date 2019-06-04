@@ -12,13 +12,20 @@ import com.kronos.diffutil.IEqualsAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 public class TestEntity implements Parcelable, IDifference, IEqualsAdapter {
 
     private int id;
     private long displayTime;
+    private String text;
 
     public int getId() {
         return id;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public long getDisplayTime() {
@@ -31,11 +38,13 @@ public class TestEntity implements Parcelable, IDifference, IEqualsAdapter {
 
     public void update() {
         displayTime = System.currentTimeMillis();
+        text = "更新数据";
     }
 
 
     public TestEntity() {
         displayTime = System.currentTimeMillis();
+        text = String.valueOf(new Random().nextInt(10000));
     }
 
     @NotNull
