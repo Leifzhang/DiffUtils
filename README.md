@@ -1,1 +1,3 @@
 # DiffUtils
+
+## 简单的diffutils封装以及配合recyclerview adapter使用 可以实现数据动态增删移动等等操作同时配合 recyclerview adapter的局部数据调整刷新结合在一起
