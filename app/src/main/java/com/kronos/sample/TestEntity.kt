@@ -34,7 +34,11 @@ class TestEntity : Parcelable, IDifference, IEqualsAdapter {
 
     override fun equals(obj: Any?): Boolean {
         return if (obj is TestEntity) {
-            displayTime == obj.displayTime
+            return if (displayTime == obj.displayTime) {
+                true
+            } else {
+                TextUtils.equals(text, obj.text)
+            }
         } else super.equals(obj)
     }
 
@@ -45,11 +49,13 @@ class TestEntity : Parcelable, IDifference, IEqualsAdapter {
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(this.id)
         dest.writeLong(this.displayTime)
+        dest.writeString(this.text)
     }
 
     protected constructor(`in`: Parcel) {
         this.id = `in`.readInt()
         this.displayTime = `in`.readLong()
+        this.text = `in`.readString()
     }
 
     companion object {

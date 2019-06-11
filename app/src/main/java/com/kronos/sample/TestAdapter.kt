@@ -34,7 +34,8 @@ class TestAdapter(private val diffHelper: DiffHelper) : RecyclerView.Adapter<Tes
 
     class VieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(entity: TestEntity) {
-            itemView.titleTv.text = entity.id.toString() + " ${entity.text} " + DateHelper.getTime(entity.displayTime, "yyyy-MM-dd HH:mm")
+            itemView.titleTv.text = entity.id.toString() + " ${entity.text} " +
+                    DateHelper.getTime(entity.displayTime, "yyyy-MM-dd HH:mm")
         }
     }
 }
