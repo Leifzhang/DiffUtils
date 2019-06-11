@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kronos.diffutil.DiffHelper
+import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter
+import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -17,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mockEntity()
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = TestAdapter(diffHelper)
+        recyclerView.adapter = SlideInRightAnimationAdapter(TestAdapter(diffHelper))
+        recyclerView.itemAnimator = SlideInRightAnimator()
         diffHelper.setData(items)
         addTv.setOnClickListener {
             mockEntity()
