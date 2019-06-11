@@ -54,10 +54,9 @@ class DiffHelper {
         }
     }
 
-    private fun addData(pos: Int) {
-        // try {
-        if (itemsCursor?.get(pos) is Parcelable) {
-            val parcelable = itemsCursor?.get(pos) as Parcelable
+    private fun addData(oldPosition: Int) {
+        if (itemsCursor?.get(oldPosition) is Parcelable) {
+            val parcelable = itemsCursor?.get(oldPosition) as Parcelable
             val parcel = Parcel.obtain()
             parcelable.writeToParcel(parcel, 0)
             parcel.setDataPosition(0)
@@ -66,16 +65,13 @@ class DiffHelper {
             val dateEntity = constructor.newInstance(parcel)
             mData?.let {
                 synchronized(it) {
-                    it.add(pos, dateEntity)
+                    it.add(oldPosition, dateEntity)
                 }
             }
             parcel.recycle()
         } else {
-            itemsCursor?.get(pos)?.let { mData?.add(pos, it) }
+            itemsCursor?.get(oldPosition)?.let { mData?.add(oldPosition, it) }
         }
-        //    } catch (e: Exception) {
-        //       e.printStackTrace()
-        //  }
     }
 
     private fun removeData(pos: Int) {
@@ -127,6 +123,9 @@ class DiffHelper {
             override fun onInserted(position: Int, count: Int) {
                 Log.i("DiffHelper", "onInserted position:$position  count:$count")
                 for (i in 0 until count) {
+                    val oldPosition = position + i
+                    val newPosition = diffResult.convertNewPositionToOld(oldPosition)
+                    Log.i("DiffHelper", "onInserted newPosition:$newPosition  oldPosition:$oldPosition")
                     addData(position + i)
                 }
                 callBack?.onInserted(position, count)
@@ -177,7 +176,6 @@ class DiffHelper {
     fun <T : Parcelable> getEntity(pos: Int): T? {
         return if (itemsCursor?.size!! <= pos || pos < 0) null else itemsCursor?.get(pos) as T
     }
-
 
 }
 

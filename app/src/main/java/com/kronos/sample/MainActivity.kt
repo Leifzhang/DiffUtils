@@ -44,10 +44,10 @@ class MainActivity : AppCompatActivity() {
             items = mutableListOf()
         }
         var count = 0
-        val itemSize = items?.size
+        val itemSize = if (items?.isEmpty()!!) 0 else items!![items!!.size - 1].id + 1
         while (count < 20) {
             val entity = TestEntity()
-            entity.id = itemSize?.plus(count) ?: 0
+            entity.id = itemSize.plus(count)
             count++
             items?.add(entity)
         }
