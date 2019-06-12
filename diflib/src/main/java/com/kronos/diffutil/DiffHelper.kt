@@ -157,16 +157,8 @@ class DiffHelper {
     }
 
     fun swap(oldPosition: Int, newPosition: Int) {
-        if (oldPosition < newPosition) {
-            for (i in oldPosition until newPosition) {
-                Collections.swap(mData, i, i + 1)
-            }
-        }
-        if (oldPosition > newPosition) {
-            for (i in oldPosition downTo newPosition + 1) {
-                Collections.swap(mData, i, i - 1)
-            }
-        }
+        Collections.swap(mData, oldPosition, newPosition)
+
     }
 
     fun getItemSize(): Int {

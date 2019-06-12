@@ -10,6 +10,7 @@ import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,23 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun swap(list: MutableList<TestEntity>?, oldPosition: Int, newPosition: Int) {
-        if (null == list) {
-            throw IllegalStateException("The list can not be empty...")
-        }
-        val tempElement = list[oldPosition]
-
-        if (oldPosition < newPosition) {
-            for (i in oldPosition until newPosition) {
-                list[i] = list[i + 1]
-            }
-            list[newPosition] = tempElement
-        }
-        if (oldPosition > newPosition) {
-            for (i in oldPosition downTo newPosition + 1) {
-                list[i] = list[i - 1]
-            }
-            list[newPosition] = tempElement
-        }
+        Collections.swap(list, oldPosition, newPosition)
     }
 
 }
