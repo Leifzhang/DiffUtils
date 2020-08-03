@@ -10,13 +10,9 @@ import com.kronos.diffutil.IEqualsAdapter
 
 import java.util.Random
 
-class TestEntity : Parcelable, IDifference, IEqualsAdapter {
-
-    var id: Int = 0
-    var displayTime: Long = 0
-        private set
-    var text: String? = null
-        private set
+data class TestEntity(var id: Int = 0,
+                      var displayTime: Long = 0,
+                      var text: String? = Random().nextInt(10000).toString()) : Parcelable, IDifference, IEqualsAdapter {
 
     override val uniqueId: String
         get() = id.toString()
@@ -27,47 +23,25 @@ class TestEntity : Parcelable, IDifference, IEqualsAdapter {
     }
 
 
-    constructor() {
-        displayTime = System.currentTimeMillis()
-        text = Random().nextInt(10000).toString()
-    }
+    constructor(source: Parcel) : this(
+            source.readInt(),
+            source.readLong(),
+            source.readString()
+    )
 
-    override fun equals(obj: Any?): Boolean {
-        return if (obj is TestEntity) {
-            return if (displayTime == obj.displayTime) {
-                true
-            } else {
-                TextUtils.equals(text, obj.text)
-            }
-        } else super.equals(obj)
-    }
+    override fun describeContents() = 0
 
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeInt(this.id)
-        dest.writeLong(this.displayTime)
-        dest.writeString(this.text)
-    }
-
-    protected constructor(`in`: Parcel) {
-        this.id = `in`.readInt()
-        this.displayTime = `in`.readLong()
-        this.text = `in`.readString()
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(id)
+        writeLong(displayTime)
+        writeString(text)
     }
 
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<TestEntity> = object : Parcelable.Creator<TestEntity> {
-            override fun createFromParcel(source: Parcel): TestEntity {
-                return TestEntity(source)
-            }
-
-            override fun newArray(size: Int): Array<TestEntity?> {
-                return arrayOfNulls(size)
-            }
+            override fun createFromParcel(source: Parcel): TestEntity = TestEntity(source)
+            override fun newArray(size: Int): Array<TestEntity?> = arrayOfNulls(size)
         }
     }
 }

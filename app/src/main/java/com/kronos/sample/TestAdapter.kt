@@ -8,7 +8,7 @@ import com.kronos.diffutil.DiffHelper
 import com.kronos.diffutil.SimpleAdapterCallBack
 import kotlinx.android.synthetic.main.recycler_item_test.view.*
 
-class TestAdapter(private val diffHelper: DiffHelper) : RecyclerView.Adapter<TestAdapter.VieHolder>() {
+class TestAdapter(private val diffHelper: DiffHelper<TestEntity>) : RecyclerView.Adapter<TestAdapter.VieHolder>() {
 
     init {
         diffHelper.callBack = SimpleAdapterCallBack(this)
@@ -21,7 +21,7 @@ class TestAdapter(private val diffHelper: DiffHelper) : RecyclerView.Adapter<Tes
 
     override fun onBindViewHolder(holder: VieHolder, position: Int) {
         val entity = diffHelper.getEntity<TestEntity>(position)
-        entity?.let { holder.bindData(it) }
+        holder.bindData(entity)
         holder.itemView.setOnClickListener {
             entity?.update()
             diffHelper.notifyItemChanged()
@@ -33,9 +33,12 @@ class TestAdapter(private val diffHelper: DiffHelper) : RecyclerView.Adapter<Tes
     }
 
     class VieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindData(entity: TestEntity) {
-            itemView.titleTv.text = entity.id.toString() + " ${entity.text} " +
-                    DateHelper.getTime(entity.displayTime, "yyyy-MM-dd HH:mm")
+
+        fun bindData(entity: TestEntity?) {
+            entity?.apply {
+                itemView.titleTv.text = entity.id.toString() + " ${entity.text} " +
+                        entity.displayTime.getTime("yyyy-MM-dd HH:mm")
+            }
         }
     }
 }
