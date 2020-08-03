@@ -14,8 +14,11 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    private var items: MutableList<TestEntity>? = null
-    private val diffHelper: DiffHelper = DiffHelper()
+    private val items by lazy {
+        mutableListOf<TestEntity>()
+    }
+
+    private val diffHelper: DiffHelper<TestEntity> = DiffHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             diffHelper.notifyItemChanged()
         }
         removeTv.setOnClickListener {
-            items?.removeAt(0)
+            items.removeAt(0)
             diffHelper.notifyItemChanged()
         }
         swapTv.setOnClickListener {
@@ -38,24 +41,20 @@ class MainActivity : AppCompatActivity() {
             diffHelper.notifyItemChanged()
         }
         refreshTv.setOnClickListener {
-            items = mutableListOf()
+            items.clear()
             mockEntity()
-            diffHelper.setData(items)
+            diffHelper.notifyItemChanged()
         }
 
     }
 
     private fun mockEntity() {
-        if (items == null) {
-            items = mutableListOf()
-        }
         var count = 0
-        val itemSize = if (items?.isEmpty()!!) 0 else items!![items!!.size - 1].id + 1
+        val itemSize = if (items.isEmpty()) 0 else items[items.size - 1].id + 1
         while (count < 20) {
-            val entity = TestEntity()
-            entity.id = itemSize.plus(count)
+            val entity = TestEntity(itemSize.plus(count))
             count++
-            items?.add(entity)
+            items.add(entity)
         }
     }
 

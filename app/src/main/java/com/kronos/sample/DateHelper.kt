@@ -4,14 +4,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-object DateHelper {
-    fun getTime(timeInMillis: Long, dateFormat: SimpleDateFormat): String {
-        return dateFormat.format(Date(timeInMillis))
-    }
-
-
-    fun getTime(timeInMillis: Long, format: String): String {
-        val dateFormat = SimpleDateFormat(format, Locale.CHINA)
-        return getTime(timeInMillis, dateFormat)
-    }
+fun Long.getTime(dateFormat: SimpleDateFormat): String {
+    return dateFormat.format(Date(this))
 }
+
+
+fun Long.getTime(format: String): String {
+    val dateFormat = SimpleDateFormat(format, Locale.CHINA)
+    return getTime(dateFormat)
+}
+

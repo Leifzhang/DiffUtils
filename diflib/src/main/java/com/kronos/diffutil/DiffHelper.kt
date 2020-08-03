@@ -6,18 +6,19 @@ import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 
-class DiffHelper {
-    private var itemsCursor: MutableList<*>? = null
-    private var mData: MutableList<Any>? = null
-    private var diffDetectMoves = false
+class DiffHelper<T> {
+    private var itemsCursor: MutableList<T>? = null
+    private var mData: CopyOnWriteArrayList<T>? = null
+    var diffDetectMoves = false
     var callBack: ListUpdateCallback? = null
 
-    fun setData(itemsCursor: MutableList<*>?) {
+    fun setData(itemsCursor: MutableList<T>?) {
         this.itemsCursor = itemsCursor
         if (mData == null) {
-            mData = mutableListOf()
+            mData = CopyOnWriteArrayList()
             copyData()
         }
         diffUtils()
@@ -25,29 +26,31 @@ class DiffHelper {
 
     private fun copyData() {
         try {
-            if (itemsCursor != null && itemsCursor!!.isNotEmpty()) {
-                if (itemsCursor!![0] is Parcelable) {
-                    mData = mutableListOf()
-                } else {
-                    mData = mutableListOf()
-                    for (entity in itemsCursor!!) {
-                        entity?.let { mData!!.add(it) }
+            itemsCursor?.apply {
+                if (isNotEmpty()) {
+                    if (this[0] is Parcelable) {
+                        mData = CopyOnWriteArrayList()
+                    } else {
+                        mData = CopyOnWriteArrayList()
+                        for (entity in this) {
+                            mData?.add(entity)
+                        }
+                        return
                     }
+                } else {
+                    mData = CopyOnWriteArrayList()
                     return
                 }
-            } else {
-                mData = mutableListOf()
-                return
-            }
-            for (entity in itemsCursor!!) {
-                val parcel = Parcel.obtain()
-                (entity as Parcelable).writeToParcel(parcel, 0)
-                parcel.setDataPosition(0)
-                val constructor = entity.javaClass.getDeclaredConstructor(Parcel::class.java)
-                constructor.isAccessible = true
-                val dateEntity = constructor.newInstance(parcel)
-                mData!!.add(dateEntity)
-                parcel.recycle()
+                for (entity in this) {
+                    val parcel = Parcel.obtain()
+                    (entity as Parcelable).writeToParcel(parcel, 0)
+                    parcel.setDataPosition(0)
+                    val constructor = entity.javaClass.getDeclaredConstructor(Parcel::class.java)
+                    constructor.isAccessible = true
+                    val dateEntity = constructor.newInstance(parcel) as T
+                    mData?.add(dateEntity)
+                    parcel.recycle()
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -62,11 +65,9 @@ class DiffHelper {
             parcel.setDataPosition(0)
             val constructor = parcelable.javaClass.getDeclaredConstructor(Parcel::class.java)
             constructor.isAccessible = true
-            val dateEntity = constructor.newInstance(parcel)
+            val dateEntity = constructor.newInstance(parcel) as T
             mData?.let {
-                synchronized(it) {
-                    it.add(oldPosition, dateEntity)
-                }
+                it.add(oldPosition, dateEntity)
             }
             parcel.recycle()
         } else {
@@ -90,7 +91,7 @@ class DiffHelper {
             parcel.setDataPosition(0)
             val constructor = parcelable.javaClass.getDeclaredConstructor(Parcel::class.java)
             constructor.isAccessible = true
-            val dateEntity = constructor.newInstance(parcel)
+            val dateEntity = constructor.newInstance(parcel) as T
             mData?.let {
                 synchronized(it) {
                     it.removeAt(oldPosition)
@@ -116,23 +117,23 @@ class DiffHelper {
     @Synchronized
     private fun diffUtils() {
         if (itemsCursor == null) {
-            itemsCursor = mutableListOf<Any>()
+            itemsCursor = mutableListOf()
         }
         val diffResult = DiffUtil.calculateDiff(BaseDiffCallBack(mData, itemsCursor), diffDetectMoves)
         diffResult.dispatchUpdatesTo(object : ListUpdateCallback {
             override fun onInserted(position: Int, count: Int) {
-                Log.i("DiffHelper", "onInserted position:$position  count:$count")
+                // Log.i("DiffHelper", "onInserted position:$position  count:$count")
                 for (i in 0 until count) {
                     val oldPosition = position + i
                     val newPosition = diffResult.convertNewPositionToOld(oldPosition)
-                    Log.i("DiffHelper", "onInserted newPosition:$newPosition  oldPosition:$oldPosition")
+                    //   Log.i("DiffHelper", "onInserted newPosition:$newPosition  oldPosition:$oldPosition")
                     addData(position + i)
                 }
                 callBack?.onInserted(position, count)
             }
 
             override fun onRemoved(position: Int, count: Int) {
-                Log.i("DiffHelper", "onRemoved position:$position   count:$count")
+                //  Log.i("DiffHelper", "onRemoved position:$position   count:$count")
                 for (i in 0 until count) {
                     removeData(position)
                 }
@@ -141,7 +142,7 @@ class DiffHelper {
 
             override fun onMoved(fromPosition: Int, toPosition: Int) {
                 swap(fromPosition, toPosition)
-                Log.i("DiffHelper", "onMoved fromPosition:$fromPosition  toPosition:$toPosition")
+                //  Log.i("DiffHelper", "onMoved fromPosition:$fromPosition  toPosition:$toPosition")
                 callBack?.onMoved(fromPosition, toPosition)
             }
 
@@ -150,7 +151,7 @@ class DiffHelper {
                     val oldPosition = position + i
                     changeData(oldPosition, diffResult.convertOldPositionToNew(oldPosition))
                 }
-                Log.i("DiffHelper", "onChanged  position:$position count:$count")
+                //  Log.i("DiffHelper", "onChanged  position:$position count:$count")
                 callBack?.onChanged(position, count, payload)
             }
         })
@@ -165,8 +166,8 @@ class DiffHelper {
         return itemsCursor?.size ?: 0
     }
 
-    fun <T : Parcelable> getEntity(pos: Int): T? {
-        return if (itemsCursor?.size!! <= pos || pos < 0) null else itemsCursor?.get(pos) as T
+    fun <T> getEntity(pos: Int): T? {
+        return if (itemsCursor?.size ?: 0 <= pos || pos < 0) null else itemsCursor?.get(pos) as T
     }
 
 }
