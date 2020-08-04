@@ -4,21 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kronos.diffutil.ParcelDiffHelper
-import com.kronos.sample.adapter.TestAdapter
+import com.kronos.diffutil.SimpleDiffHelper
+import com.kronos.sample.adapter.StringAdapter
 import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_recyclerview.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
-class SimpleAdapterActivity : AppCompatActivity() {
+class StringAdapterActivity : AppCompatActivity() {
 
     private val items by lazy {
-        mutableListOf<TestEntity>()
+        mutableListOf<String>()
     }
 
-    private val parcelDiffHelper: ParcelDiffHelper<TestEntity> = ParcelDiffHelper()
+    private val parcelDiffHelper: SimpleDiffHelper<String> = SimpleDiffHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +32,8 @@ class SimpleAdapterActivity : AppCompatActivity() {
             parcelDiffHelper.notifyItemChanged()
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = SlideInRightAnimationAdapter(TestAdapter(parcelDiffHelper).apply {
-            addHeaderView(LayoutInflater.from(this@SimpleAdapterActivity).inflate(R.layout.recycler_item_header,
+        recyclerView.adapter = SlideInRightAnimationAdapter(StringAdapter(parcelDiffHelper).apply {
+            addHeaderView(LayoutInflater.from(this@StringAdapterActivity).inflate(R.layout.recycler_item_header,
                     recyclerView, false))
         })
         recyclerView.itemAnimator = SlideInRightAnimator()
@@ -59,9 +61,9 @@ class SimpleAdapterActivity : AppCompatActivity() {
 
     private fun mockEntity() {
         var count = 0
-        val itemSize = if (items.isEmpty()) 0 else items[items.size - 1].id + 1
+        val itemSize = if (items.isEmpty()) 0 else items.size + 1
         while (count < 20) {
-            val entity = TestEntity(itemSize.plus(count))
+            val entity = itemSize.plus(count).toString()
             count++
             items.add(entity)
         }
@@ -71,13 +73,13 @@ class SimpleAdapterActivity : AppCompatActivity() {
         var count = 0
         val itemSize = if (items.isEmpty()) 0 else items.size + 1
         while (count < 20) {
-            val entity = TestEntity(itemSize.plus(count))
+            val entity = itemSize.plus(count).toString()
             count++
             items.add(index, entity)
         }
     }
 
-    private fun swap(list: MutableList<TestEntity>?, oldPosition: Int, newPosition: Int) {
+    private fun swap(list: MutableList<String>?, oldPosition: Int, newPosition: Int) {
         Collections.swap(list, oldPosition, newPosition)
     }
 
