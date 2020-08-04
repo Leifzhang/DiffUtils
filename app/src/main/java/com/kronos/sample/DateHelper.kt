@@ -8,7 +8,6 @@ fun Long.getTime(dateFormat: SimpleDateFormat): String {
     return dateFormat.format(Date(this))
 }
 
-
 fun Long.getTime(format: String): String {
     val dateFormat = SimpleDateFormat(format, Locale.CHINA)
     return getTime(dateFormat)

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kronos.diffutil.DiffHelper
+import com.kronos.diffutil.ParcelDiffHelper
 import com.kronos.sample.adapter.BRAVHAdapter
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_recyclerview.*
@@ -15,9 +15,9 @@ class BRAVHAdapterActivity : AppCompatActivity() {
         mutableListOf<TestEntity>()
     }
 
-    private val diffHelper: DiffHelper<TestEntity> = DiffHelper()
+    private val parcelDiffHelper: ParcelDiffHelper<TestEntity> = ParcelDiffHelper()
     private val adapter by lazy {
-        BRAVHAdapter(diffHelper)
+        BRAVHAdapter(parcelDiffHelper)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,21 +31,21 @@ class BRAVHAdapterActivity : AppCompatActivity() {
         recyclerView.itemAnimator = SlideInRightAnimator()
         addTv.setOnClickListener {
             mockEntity()
-            diffHelper.notifyItemChanged()
+            parcelDiffHelper.notifyItemChanged()
         }
         removeTv.setOnClickListener {
             items.removeAt(0)
             mockEntity(2)
-            diffHelper.notifyItemChanged()
+            parcelDiffHelper.notifyItemChanged()
         }
         swapTv.setOnClickListener {
             swap(items, 1, 4)
-            diffHelper.notifyItemChanged()
+            parcelDiffHelper.notifyItemChanged()
         }
         refreshTv.setOnClickListener {
             items.clear()
             mockEntity()
-            diffHelper.notifyItemChanged()
+            parcelDiffHelper.notifyItemChanged()
         }
 
     }

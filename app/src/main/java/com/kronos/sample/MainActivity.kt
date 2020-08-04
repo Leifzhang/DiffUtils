@@ -4,15 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.kronos.diffutil.DiffHelper
-import com.kronos.sample.adapter.BRAVHAdapter
-import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_recyclerview.*
-import java.util.*
-import kotlin.reflect.KClass
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +16,9 @@ class MainActivity : AppCompatActivity() {
         }
         bravhAdapterBtn.setOnClickListener {
             intent(BRAVHAdapterActivity::class.java)
+        }
+        stringAdapterBtn.setOnClickListener {
+            intent(StringAdapterActivity::class.java)
         }
     }
 
