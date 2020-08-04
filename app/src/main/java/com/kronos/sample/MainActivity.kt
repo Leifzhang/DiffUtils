@@ -1,65 +1,34 @@
 package com.kronos.sample
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kronos.diffutil.DiffHelper
-import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter
-import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
+import com.kronos.sample.adapter.BRAVHAdapter
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_recyclerview.*
 import java.util.*
+import kotlin.reflect.KClass
 
 
 class MainActivity : AppCompatActivity() {
-    private val items by lazy {
-        mutableListOf<TestEntity>()
-    }
-
-    private val diffHelper: DiffHelper<TestEntity> = DiffHelper()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mockEntity()
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = SlideInRightAnimationAdapter(TestAdapter(diffHelper))
-        recyclerView.itemAnimator = SlideInRightAnimator()
-        diffHelper.setData(items)
-        addTv.setOnClickListener {
-            mockEntity()
-            diffHelper.notifyItemChanged()
+        simpleAdapterBtn.setOnClickListener {
+            intent(SimpleAdapterActivity::class.java)
         }
-        removeTv.setOnClickListener {
-            items.removeAt(0)
-            diffHelper.notifyItemChanged()
-        }
-        swapTv.setOnClickListener {
-            swap(items, 1, 4)
-            diffHelper.notifyItemChanged()
-        }
-        refreshTv.setOnClickListener {
-            items.clear()
-            mockEntity()
-            diffHelper.notifyItemChanged()
-        }
-
-    }
-
-    private fun mockEntity() {
-        var count = 0
-        val itemSize = if (items.isEmpty()) 0 else items[items.size - 1].id + 1
-        while (count < 20) {
-            val entity = TestEntity(itemSize.plus(count))
-            count++
-            items.add(entity)
+        bravhAdapterBtn.setOnClickListener {
+            intent(BRAVHAdapterActivity::class.java)
         }
     }
 
-    private fun swap(list: MutableList<TestEntity>?, oldPosition: Int, newPosition: Int) {
-        Collections.swap(list, oldPosition, newPosition)
+    private fun intent(target: Class<out Any>) {
+        val intent = Intent(this, target)
+        startActivity(intent)
     }
-
 }

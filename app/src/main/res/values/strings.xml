@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DiffUtils</string>
+    <string name="simple_adapter_text">默认系统adapter组合</string>
+    <string name="bravh_adapter_text">默认bravh adapter组合</string>
 </resources>
