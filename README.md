@@ -8,13 +8,14 @@
 
 原理基于Parcel，用安卓原生的Parcelable进行数据模型拷贝。
 
-当前项目简单的diffutils封装以及配合recyclerview adapter使用，可以实现数据动态增删移动等等操作同时配合，recyclerview adapter的局部数据调整刷新结合在一起。
+当前项目简单的diffutil封装以及配合recyclerview adapter使用，可以实现数据动态增删移动等等操作同时配合，recyclerview adapter的局部数据调整刷新结合在一起。
 
 ## 使用
 
-1. 数据模型的定义，必须使用Parcelable,必须实现IDifference接口，主要来辨别数据主体是否发生变更。
+代码已经加入了线程池，以及主线程调度逻辑，所以可以直接子线程使用。不上传maven的原因是觉得可能还不够完善，可以直接考虑代码复制。
 
-    可以实现IEqualsAdapter,实现了当数据内容发生变更，也会通知Adapter刷新。
+1. 对代码进行了重定义封装，当你需要使用深拷贝的时候，切记实现Parcelable接口，数据model最好实现IDifference接口，根据这个进行数据ID逻辑判断。如果要做内容比较的情况下实现IEqualsAdapter，同时使用插件生成hashcode，equals方法。
+   
 
 ```kotlin
 data class TestEntity(var id: Int = 0,
@@ -28,7 +29,6 @@ data class TestEntity(var id: Int = 0,
         displayTime = System.currentTimeMillis()
         text = "更新数据"
     }
-
 
     constructor(source: Parcel) : this(
             source.readInt(),
@@ -54,11 +54,23 @@ data class TestEntity(var id: Int = 0,
 }
 ```
 
-2. 初始化并传入数据，并设置数据刷新回掉，如果你有header或者别的话自己定义一个。
+2. 初始化并传入数据，并设置数据刷新回掉，如果你有header或者别的话自己定义一个,提供了深拷贝和浅拷贝的两种实现。
 
 ```kotlin
-     val diffHelper: DiffHelper<Any> = DiffHelper()
+     // 深拷贝
+     val diffHelper: ParcelDiffHelper<TestEntity> = ParcelDiffHelper()
      diffHelper.callBack = SimpleAdapterCallBack(this)
+     // lifecyclerowner 
+     diffHelper.bindLifeCycle(this)
+     diffHelper.setData(items)
+```
+
+```kotlin
+    //浅拷贝版本
+     val diffHelper: SimpleDiffHelper<String> = SimpleDiffHelper()
+     diffHelper.callBack = SimpleAdapterCallBack(this)
+     // lifecyclerowner 
+     diffHelper.bindLifeCycle(this)
      diffHelper.setData(items)
 ```
 
@@ -70,4 +82,4 @@ data class TestEntity(var id: Int = 0,
 
 ## 其他
 
-代码可以结合任意的Adapter使用，包括BRVH等等。
+代码可以结合任意的Adapter使用，包括BRVH等等。Demo中有简单的接入方式。

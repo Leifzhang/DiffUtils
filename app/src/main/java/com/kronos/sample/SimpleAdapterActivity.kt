@@ -34,8 +34,8 @@ class SimpleAdapterActivity : AppCompatActivity() {
             addHeaderView(LayoutInflater.from(this@SimpleAdapterActivity).inflate(R.layout.recycler_item_header,
                     recyclerView, false))
         })
+        parcelDiffHelper.bindLifeCycle(this)
         recyclerView.itemAnimator = SlideInRightAnimator()
-
         addTv.setOnClickListener {
             mockEntity()
             parcelDiffHelper.notifyItemChanged()
