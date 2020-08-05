@@ -1,5 +1,7 @@
 package com.kronos.diffutil
 
+import androidx.lifecycle.LifecycleOwner
+
 interface AbstractDiffHelper<T> {
 
     fun clone()
@@ -11,4 +13,6 @@ interface AbstractDiffHelper<T> {
     fun getItemSize(): Int
 
     fun <T> getEntity(pos: Int): T?
+
+    fun bindLifeCycle(lifecycleOwner: LifecycleOwner)
 }
