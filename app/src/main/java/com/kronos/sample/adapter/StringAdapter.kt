@@ -10,14 +10,14 @@ import com.kronos.sample.widget.HeaderAdapterCallBack
 import com.kronos.sample.widget.HeaderBaseAdapter
 import kotlinx.android.synthetic.main.recycler_item_test.view.*
 
-class StringAdapter(private val parcelDiffHelper: SimpleDiffHelper<String>) : HeaderBaseAdapter<StringViewHolder>() {
+class StringAdapter(private val diffHelper: SimpleDiffHelper<String>) : HeaderBaseAdapter<StringViewHolder>() {
 
     init {
-        parcelDiffHelper.callBack = HeaderAdapterCallBack(this)
+        diffHelper.callBack = HeaderAdapterCallBack(this)
     }
 
     override fun listItemCount(): Int {
-        return parcelDiffHelper.getItemSize()
+        return diffHelper.getItemSize()
     }
 
     override fun onCreateListViewHolder(parent: ViewGroup, viewType: Int): StringViewHolder {
@@ -26,9 +26,10 @@ class StringAdapter(private val parcelDiffHelper: SimpleDiffHelper<String>) : He
     }
 
     override fun onBindListViewHolder(holder: StringViewHolder, position: Int) {
-        val entity = parcelDiffHelper.getEntity<String>(position)
+        val entity = diffHelper.getEntity<String>(position)
         holder.bindData(entity)
     }
+
 }
 
 class StringViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

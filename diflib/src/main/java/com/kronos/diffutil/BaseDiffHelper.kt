@@ -27,9 +27,7 @@ abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
         this.itemsCursor = itemsCursor
         itemsCursor?.apply {
             mBackgroundThreadExecutor.execute {
-                if (mData == null) {
-                    clone()
-                }
+                clone()
                 if (!ignore) {
                     mMainThreadExecutor.execute {
                         callBack?.onInserted(0, itemsCursor.size)
