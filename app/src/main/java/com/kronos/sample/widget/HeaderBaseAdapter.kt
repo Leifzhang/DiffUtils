@@ -58,7 +58,6 @@ abstract class HeaderBaseAdapter<VH : ViewHolder> : RecyclerView.Adapter<ViewHol
         return getListViewType(position - (headerViews.size))
     }
 
-
     abstract fun listItemCount(): Int
 
     abstract fun onCreateListViewHolder(parent: ViewGroup, viewType: Int): VH
@@ -68,7 +67,6 @@ abstract class HeaderBaseAdapter<VH : ViewHolder> : RecyclerView.Adapter<ViewHol
     open fun getListViewType(position: Int): Int {
         return 1
     }
-
 
     companion object {
         const val HEAD_VIEW_TYPE = 10000

@@ -1,15 +1,10 @@
 package com.kronos.sample.adapter
 
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.kronos.diffutil.ParcelDiffHelper
-import com.kronos.sample.R
 import com.kronos.sample.TestEntity
-import com.kronos.sample.getTime
-import com.kronos.sample.widget.BRVHAdapterCallBack
-import kotlinx.android.synthetic.main.recycler_item_test.view.*
 
-class BRAVHAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>) : BaseQuickAdapter<TestEntity, BaseViewHolder>(R.layout.recycler_item_test) {
+class BRAVHAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>)
+/*: BaseQuickAdapter<TestEntity, BaseViewHolder>(R.layout.recycler_item_test) {
 
     init {
         parcelDiffHelper.callBack = BRVHAdapterCallBack(this)
@@ -29,4 +24,4 @@ class BRAVHAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>) :
     override fun getDefItemCount(): Int {
         return parcelDiffHelper.getItemSize()
     }
-}
+}*/

@@ -15,11 +15,12 @@ class MainActivity : AppCompatActivity() {
             intent(SimpleAdapterActivity::class.java)
         }
         bravhAdapterBtn.setOnClickListener {
-            intent(BRAVHAdapterActivity::class.java)
+            intent(ConcatAdapterActivity::class.java)
         }
         stringAdapterBtn.setOnClickListener {
             intent(StringAdapterActivity::class.java)
         }
+        //val concatAdapter
     }
 
     private fun intent(target: Class<out Any>) {

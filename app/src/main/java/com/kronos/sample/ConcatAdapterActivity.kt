@@ -1,31 +1,74 @@
 package com.kronos.sample
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kronos.diffutil.ParcelDiffHelper
+import com.kronos.diffutil.SimpleDiffHelper
+import com.kronos.sample.adapter.StringAdapter
+import com.kronos.sample.adapter.TestAdapter
+import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_recyclerview.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
-class BRAVHAdapterActivity : AppCompatActivity() {
+/**
+ *
+ *  @Author LiABao
+ *  @Since 2021/5/11
+ *
+ */
+class ConcatAdapterActivity : AppCompatActivity() {
     private val items by lazy {
         mutableListOf<TestEntity>()
     }
+
+    private val stringParcelDiffHelper: SimpleDiffHelper<String> = SimpleDiffHelper()
 
     private val parcelDiffHelper: ParcelDiffHelper<TestEntity> = ParcelDiffHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recyclerview)
-        mockEntity()
+        GlobalScope.launch {
+            delay(1000)
+            mockEntity()
+            parcelDiffHelper.setData(items)
+            parcelDiffHelper.notifyItemChanged()
+            delay(1000)
+            stringParcelDiffHelper.setData(mutableListOf<String>().apply {
+                for (index in 0 until 20) {
+                    add(index.toString())
+                }
+            })
+        }
+
         recyclerView.layoutManager = LinearLayoutManager(this)
-     /*   recyclerView.adapter = adapter
-        adapter.addHeaderView(
-            LayoutInflater.from(this@BRAVHAdapterActivity)
-                .inflate(R.layout.recycler_item_header, recyclerView, false)
-        )*/
-      //  adapter.setNewInstance(items)
+        val adapter = SlideInRightAnimationAdapter(TestAdapter(parcelDiffHelper).apply {
+            addHeaderView(
+                LayoutInflater.from(this@ConcatAdapterActivity).inflate(
+                    R.layout.recycler_item_header,
+                    recyclerView, false
+                )
+            )
+        })
+        val stringAdapter =
+            SlideInRightAnimationAdapter(StringAdapter(stringParcelDiffHelper).apply {
+                addHeaderView(
+                    LayoutInflater.from(this@ConcatAdapterActivity).inflate(
+                        R.layout.recycler_item_header,
+                        recyclerView, false
+                    )
+                )
+            })
+        val concatAdapter = ConcatAdapter(adapter, stringAdapter)
+        recyclerView.adapter = concatAdapter
+        parcelDiffHelper.bindLifeCycle(this)
         recyclerView.itemAnimator = SlideInRightAnimator()
         addTv.setOnClickListener {
             mockEntity()
