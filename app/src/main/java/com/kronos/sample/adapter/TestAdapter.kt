@@ -12,7 +12,8 @@ import com.kronos.sample.widget.HeaderAdapterCallBack
 import com.kronos.sample.widget.HeaderBaseAdapter
 import kotlinx.android.synthetic.main.recycler_item_test.view.*
 
-class TestAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>) : HeaderBaseAdapter<VieHolder>() {
+class TestAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>) :
+    HeaderBaseAdapter<VieHolder>() {
 
     init {
         parcelDiffHelper.callBack = HeaderAdapterCallBack(this)
@@ -23,8 +24,12 @@ class TestAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>) : 
     }
 
     override fun onCreateListViewHolder(parent: ViewGroup, viewType: Int): VieHolder {
-        return VieHolder(LayoutInflater.from(parent.context).inflate(R.layout.recycler_item_test,
-                parent, false))
+        return VieHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.recycler_item_test,
+                parent, false
+            )
+        )
     }
 
     override fun onBindListViewHolder(holder: VieHolder, position: Int) {

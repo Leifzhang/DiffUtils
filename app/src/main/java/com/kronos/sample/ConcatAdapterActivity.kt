@@ -9,12 +9,16 @@ import com.kronos.diffutil.ParcelDiffHelper
 import com.kronos.diffutil.SimpleDiffHelper
 import com.kronos.sample.adapter.StringAdapter
 import com.kronos.sample.adapter.TestAdapter
+import com.kronos.sample.concat.adapter
+import com.kronos.sample.concat.builderConcatAdapter
+import com.kronos.sample.concat.builderSlideInRightAnimationAdapter
 import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_recyclerview.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URI.create
 import java.util.*
 
 /**
@@ -49,24 +53,32 @@ class ConcatAdapterActivity : AppCompatActivity() {
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = SlideInRightAnimationAdapter(TestAdapter(parcelDiffHelper).apply {
-            addHeaderView(
-                LayoutInflater.from(this@ConcatAdapterActivity).inflate(
-                    R.layout.recycler_item_header,
-                    recyclerView, false
-                )
-            )
-        })
-        val stringAdapter =
-            SlideInRightAnimationAdapter(StringAdapter(stringParcelDiffHelper).apply {
-                addHeaderView(
-                    LayoutInflater.from(this@ConcatAdapterActivity).inflate(
-                        R.layout.recycler_item_header,
-                        recyclerView, false
-                    )
-                )
-            })
-        val concatAdapter = ConcatAdapter(adapter, stringAdapter)
+        val concatAdapter = builderConcatAdapter {
+            adapter {
+                builderSlideInRightAnimationAdapter {
+                    TestAdapter(parcelDiffHelper).apply {
+                        addHeaderView(
+                            LayoutInflater.from(this@ConcatAdapterActivity).inflate(
+                                R.layout.recycler_item_header,
+                                recyclerView, false
+                            )
+                        )
+                    }
+                }
+            }
+            adapter {
+                builderSlideInRightAnimationAdapter {
+                    StringAdapter(stringParcelDiffHelper).apply {
+                        addHeaderView(
+                            LayoutInflater.from(this@ConcatAdapterActivity).inflate(
+                                R.layout.recycler_item_header,
+                                recyclerView, false
+                            )
+                        )
+                    }
+                }
+            }
+        }
         recyclerView.adapter = concatAdapter
         parcelDiffHelper.bindLifeCycle(this)
         recyclerView.itemAnimator = SlideInRightAnimator()
