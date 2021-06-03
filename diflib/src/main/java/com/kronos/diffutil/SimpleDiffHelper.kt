@@ -7,7 +7,7 @@ class SimpleDiffHelper<T> : BaseDiffHelper<T>() {
     override fun clone() {
         try {
             itemsCursor?.apply {
-                mData = CopyOnWriteArrayList(this)
+                snapshot = CopyOnWriteArrayList(this)
             }
         } catch (e: Exception) {
             e.printStackTrace()

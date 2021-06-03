@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.kronos.diffutil.BaseDiffHelper
 import com.kronos.diffutil.ParcelDiffHelper
 import com.kronos.sample.R
-import com.kronos.sample.TestEntity
+import com.kronos.sample.entity.TestEntity
 import com.kronos.sample.getTime
 import com.kronos.sample.widget.HeaderAdapterCallBack
 import com.kronos.sample.widget.HeaderBaseAdapter
 import kotlinx.android.synthetic.main.recycler_item_test.view.*
 
-class TestAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>) :
+class TestAdapter(private val parcelDiffHelper: BaseDiffHelper<TestEntity>) :
     HeaderBaseAdapter<VieHolder>() {
 
     init {

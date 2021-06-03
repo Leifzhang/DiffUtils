@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
 abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
 
     internal var itemsCursor: MutableList<T>? = null
-    internal var mData: MutableList<T>? = null
+    internal var snapshot: MutableList<T>? = null
     var diffDetectMoves = true
     var callBack: ListUpdateCallback? = null
     private val mMainThreadExecutor: Executor = MainThreadExecutor()
@@ -27,7 +27,7 @@ abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
         this.itemsCursor = itemsCursor
         itemsCursor?.apply {
             mBackgroundThreadExecutor.execute {
-                if (mData == null) {
+                if (snapshot == null) {
                     clone()
                 }
                 if (!ignore) {
@@ -66,7 +66,7 @@ abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
 
     private fun diffUtils(): DiffUtil.DiffResult {
         val diffResult =
-                DiffUtil.calculateDiff(BaseDiffCallBack(mData, itemsCursor), diffDetectMoves)
+                DiffUtil.calculateDiff(BaseDiffCallBack(snapshot, itemsCursor), diffDetectMoves)
         clone()
         return diffResult
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kronos.diffutil.ParcelDiffHelper
+import com.kronos.sample.entity.TestEntity
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_recyclerview.*
 import java.util.*
@@ -13,19 +14,21 @@ class BRAVHAdapterActivity : AppCompatActivity() {
         mutableListOf<TestEntity>()
     }
 
-    private val parcelDiffHelper: ParcelDiffHelper<TestEntity> = ParcelDiffHelper()
+    private val parcelDiffHelper: ParcelDiffHelper<TestEntity> by lazy {
+        ParcelDiffHelper()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recyclerview)
         mockEntity()
         recyclerView.layoutManager = LinearLayoutManager(this)
-     /*   recyclerView.adapter = adapter
-        adapter.addHeaderView(
-            LayoutInflater.from(this@BRAVHAdapterActivity)
-                .inflate(R.layout.recycler_item_header, recyclerView, false)
-        )*/
-      //  adapter.setNewInstance(items)
+        /*   recyclerView.adapter = adapter
+           adapter.addHeaderView(
+               LayoutInflater.from(this@BRAVHAdapterActivity)
+                   .inflate(R.layout.recycler_item_header, recyclerView, false)
+           )*/
+        //  adapter.setNewInstance(items)
         recyclerView.itemAnimator = SlideInRightAnimator()
         addTv.setOnClickListener {
             mockEntity()
