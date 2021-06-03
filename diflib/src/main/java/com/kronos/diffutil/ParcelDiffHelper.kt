@@ -10,7 +10,7 @@ class ParcelDiffHelper<T : Parcelable> : BaseDiffHelper<T>() {
     override fun clone() {
         try {
             itemsCursor?.apply {
-                mData = CopyOnWriteArrayList()
+                snapshot = CopyOnWriteArrayList()
                 for (entity in this) {
                     val parcel = Parcel.obtain()
                     (entity as Parcelable).writeToParcel(parcel, 0)
@@ -18,7 +18,7 @@ class ParcelDiffHelper<T : Parcelable> : BaseDiffHelper<T>() {
                     val constructor = entity.javaClass.getDeclaredConstructor(Parcel::class.java)
                     constructor.isAccessible = true
                     val dateEntity = constructor.newInstance(parcel) as T
-                    mData?.add(dateEntity)
+                    snapshot?.add(dateEntity)
                     parcel.recycle()
                 }
             }

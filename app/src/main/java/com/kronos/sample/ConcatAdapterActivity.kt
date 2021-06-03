@@ -3,7 +3,6 @@ package com.kronos.sample
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kronos.diffutil.ParcelDiffHelper
 import com.kronos.diffutil.SimpleDiffHelper
@@ -12,13 +11,12 @@ import com.kronos.sample.adapter.TestAdapter
 import com.kronos.sample.concat.adapter
 import com.kronos.sample.concat.builderConcatAdapter
 import com.kronos.sample.concat.builderSlideInRightAnimationAdapter
-import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
+import com.kronos.sample.entity.TestEntity
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_recyclerview.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.net.URI.create
 import java.util.*
 
 /**

@@ -1,7 +1,7 @@
 package com.kronos.sample.adapter
 
 import com.kronos.diffutil.ParcelDiffHelper
-import com.kronos.sample.TestEntity
+import com.kronos.sample.entity.TestEntity
 
 class BRAVHAdapter(private val parcelDiffHelper: ParcelDiffHelper<TestEntity>)
 /*: BaseQuickAdapter<TestEntity, BaseViewHolder>(R.layout.recycler_item_test) {

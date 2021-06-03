@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kronos.diffutil.ParcelDiffHelper
+import com.kronos.diffutil.KotlinDataDiffHelper
+import com.kronos.diffutil.by.dataDiff
 import com.kronos.sample.adapter.TestAdapter
+import com.kronos.sample.entity.TestEntity
 import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.activity_recyclerview.*
@@ -17,8 +19,9 @@ class SimpleAdapterActivity : AppCompatActivity() {
     private val items by lazy {
         mutableListOf<TestEntity>()
     }
-
-    private val parcelDiffHelper: ParcelDiffHelper<TestEntity> = ParcelDiffHelper()
+    private val dataDiffHelper: KotlinDataDiffHelper<TestEntity> by dataDiff {
+        it.copy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,33 +29,33 @@ class SimpleAdapterActivity : AppCompatActivity() {
         GlobalScope.launch {
             delay(1000)
             mockEntity()
-            parcelDiffHelper.setData(items)
-            parcelDiffHelper.notifyItemChanged()
+            dataDiffHelper.setData(items)
+            dataDiffHelper.notifyItemChanged()
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = SlideInRightAnimationAdapter(TestAdapter(parcelDiffHelper).apply {
+        recyclerView.adapter = SlideInRightAnimationAdapter(TestAdapter(dataDiffHelper).apply {
             addHeaderView(LayoutInflater.from(this@SimpleAdapterActivity).inflate(R.layout.recycler_item_header,
                     recyclerView, false))
         })
-        parcelDiffHelper.bindLifeCycle(this)
+        dataDiffHelper.bindLifeCycle(this)
         recyclerView.itemAnimator = SlideInRightAnimator()
         addTv.setOnClickListener {
             mockEntity()
-            parcelDiffHelper.notifyItemChanged()
+            dataDiffHelper.notifyItemChanged()
         }
         removeTv.setOnClickListener {
             items.removeAt(0)
             mockEntity(2)
-            parcelDiffHelper.notifyItemChanged()
+            dataDiffHelper.notifyItemChanged()
         }
         swapTv.setOnClickListener {
             swap(items, 1, 4)
-            parcelDiffHelper.notifyItemChanged()
+            dataDiffHelper.notifyItemChanged()
         }
         refreshTv.setOnClickListener {
             items.clear()
             mockEntity()
-            parcelDiffHelper.notifyItemChanged()
+            dataDiffHelper.notifyItemChanged()
         }
 
     }
