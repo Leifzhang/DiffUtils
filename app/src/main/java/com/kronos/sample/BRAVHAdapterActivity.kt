@@ -3,47 +3,50 @@ package com.kronos.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kronos.diffutil.ParcelDiffHelper
+import com.kronos.sample.databinding.ActivityRecyclerviewBinding
 import com.kronos.sample.entity.TestEntity
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
-import kotlinx.android.synthetic.main.activity_recyclerview.*
 import java.util.*
 
 class BRAVHAdapterActivity : AppCompatActivity() {
     private val items by lazy {
         mutableListOf<TestEntity>()
     }
-
     private val parcelDiffHelper: ParcelDiffHelper<TestEntity> by lazy {
         ParcelDiffHelper()
+    }
+    private val viewBind by viewBinding {
+        ActivityRecyclerviewBinding.inflate(it.layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_recyclerview)
+        setContentView(viewBind.root)
         mockEntity()
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        viewBind.recyclerView.layoutManager = LinearLayoutManager(this)
         /*   recyclerView.adapter = adapter
            adapter.addHeaderView(
                LayoutInflater.from(this@BRAVHAdapterActivity)
                    .inflate(R.layout.recycler_item_header, recyclerView, false)
            )*/
         //  adapter.setNewInstance(items)
-        recyclerView.itemAnimator = SlideInRightAnimator()
-        addTv.setOnClickListener {
+        viewBind.recyclerView.itemAnimator = SlideInRightAnimator()
+        viewBind.addTv.setOnClickListener {
             mockEntity()
             parcelDiffHelper.notifyItemChanged()
         }
-        removeTv.setOnClickListener {
+        viewBind.removeTv.setOnClickListener {
             items.removeAt(0)
             mockEntity(2)
             parcelDiffHelper.notifyItemChanged()
         }
-        swapTv.setOnClickListener {
+        viewBind.swapTv.setOnClickListener {
             swap(items, 1, 4)
             parcelDiffHelper.notifyItemChanged()
         }
-        refreshTv.setOnClickListener {
+        viewBind.refreshTv.setOnClickListener {
             items.clear()
             mockEntity()
             parcelDiffHelper.notifyItemChanged()

@@ -4,14 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kronos.diffutil.BaseDiffHelper
 import com.kronos.diffutil.ParcelDiffHelper
 import com.kronos.sample.R
+import com.kronos.sample.databinding.RecyclerItemTestBinding
 import com.kronos.sample.entity.TestEntity
 import com.kronos.sample.getTime
 import com.kronos.sample.widget.HeaderAdapterCallBack
 import com.kronos.sample.widget.HeaderBaseAdapter
-import kotlinx.android.synthetic.main.recycler_item_test.view.*
 
 class TestAdapter(private val parcelDiffHelper: BaseDiffHelper<TestEntity>) :
     HeaderBaseAdapter<VieHolder>() {
@@ -44,9 +45,10 @@ class TestAdapter(private val parcelDiffHelper: BaseDiffHelper<TestEntity>) :
 }
 
 class VieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val viewbind :RecyclerItemTestBinding by viewBinding { RecyclerItemTestBinding.bind(itemView) }
     fun bindData(entity: TestEntity?) {
         entity?.apply {
-            itemView.titleTv.text = entity.id.toString() + " ${entity.text} " +
+            viewbind.titleTv.text = entity.id.toString() + " ${entity.text} " +
                     entity.displayTime.getTime("yyyy-MM-dd HH:mm")
         }
     }

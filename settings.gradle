@@ -1,1 +1,2 @@
 include ':app', ':diflib'
+//includeBuild("../decade")
