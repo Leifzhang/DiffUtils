@@ -3,4 +3,15 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="gray_light">#666</color>
+    <color name="daynight_color_theme_pink">#666</color>
+
+    <color name="theme_color_primary_tr_icon">#666</color>
+    <color name="daynight_color_text_title">#666</color>
+    <color name="daynight_color_divider_line_for_white">#666</color>
+    <color name="theme_color_primary_tr_subtitle">#666</color>
+
+    <color name="theme_color_primary_tr_title">#666</color>
+
+
 </resources>

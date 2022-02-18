@@ -20,7 +20,8 @@ abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
     var diffDetectMoves = true
     var callBack: ListUpdateCallback? = null
     private val mMainThreadExecutor: Executor = MainThreadExecutor()
-    private val mBackgroundThreadExecutor: ExecutorService = Executors.newFixedThreadPool(2, DiffThreadFactory())
+    private val mBackgroundThreadExecutor: ExecutorService =
+        Executors.newFixedThreadPool(2, DiffThreadFactory())
 
 
     override fun setData(itemsCursor: MutableList<T>?, ignore: Boolean) {
@@ -66,7 +67,7 @@ abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
 
     private fun diffUtils(): DiffUtil.DiffResult {
         val diffResult =
-                DiffUtil.calculateDiff(BaseDiffCallBack(snapshot, itemsCursor), diffDetectMoves)
+            DiffUtil.calculateDiff(BaseDiffCallBack(snapshot, itemsCursor), diffDetectMoves)
         clone()
         return diffResult
     }

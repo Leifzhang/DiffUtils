@@ -18,13 +18,15 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
         maven { setUrl("https://maven.aliyun.com/repository/central/") }
         maven {
             url "https://oss.sonatype.org/content/groups/public"
         }
+        mavenCentral()
         google()
     }
+    group = "com.kronos.diffutils"
+    version = "0.1.0"
 }
 
 task clean(type: Delete) {
