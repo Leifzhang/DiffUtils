@@ -31,5 +31,15 @@
       <option name="name" value="maven" />
       <option name="url" value="https://maven.aliyun.com/repository/central/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven2" />
+      <option name="name" value="maven2" />
+      <option name="url" value="https://oss.sonatype.org/content/groups/public" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://nexus.bilibili.co/content/groups/carbon/" />
+    </remote-repository>
   </component>
 </project>

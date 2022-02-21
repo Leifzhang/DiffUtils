@@ -3,14 +3,15 @@ package com.kronos.sample.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kronos.diffutil.SimpleDiffHelper
 import com.kronos.sample.R
 import com.kronos.sample.widget.HeaderAdapterCallBack
 import com.kronos.sample.widget.HeaderBaseAdapter
-import kotlinx.android.synthetic.main.recycler_item_test.view.*
 
-class StringAdapter(private val parcelDiffHelper: SimpleDiffHelper<String>) : HeaderBaseAdapter<StringViewHolder>() {
+class StringAdapter(private val parcelDiffHelper: SimpleDiffHelper<String>) :
+    HeaderBaseAdapter<StringViewHolder>() {
 
     init {
         parcelDiffHelper.callBack = HeaderAdapterCallBack(this)
@@ -21,8 +22,12 @@ class StringAdapter(private val parcelDiffHelper: SimpleDiffHelper<String>) : He
     }
 
     override fun onCreateListViewHolder(parent: ViewGroup, viewType: Int): StringViewHolder {
-        return StringViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recycler_item_test,
-                parent, false))
+        return StringViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.recycler_item_test,
+                parent, false
+            )
+        )
     }
 
     override fun onBindListViewHolder(holder: StringViewHolder, position: Int) {
@@ -34,7 +39,7 @@ class StringAdapter(private val parcelDiffHelper: SimpleDiffHelper<String>) : He
 class StringViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bindData(entity: String?) {
         entity?.apply {
-            itemView.titleTv.text = entity
+            itemView.findViewById<TextView>(R.id.titleTv).text = entity
         }
     }
 }

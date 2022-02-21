@@ -26,6 +26,4 @@ inline fun builderSlideInRightAnimationAdapter(invoke: () -> RecyclerView.Adapte
     return SlideInLeftAnimationAdapter(invoke.invoke())
 }
 
-@DslMarker
-annotation class ConcatAdapterDsl
 
