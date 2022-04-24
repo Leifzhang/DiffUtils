@@ -4,22 +4,13 @@ plugins {
     id("maven-publish")
 }
 android {
-    compileSdkVersion 32
+    compileSdk 32
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 32
+        minSdk 21
+        targetSdk 32
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
 }
 
 dependencies {
