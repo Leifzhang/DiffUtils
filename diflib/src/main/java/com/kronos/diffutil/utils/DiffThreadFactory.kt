@@ -14,7 +14,7 @@ class DiffThreadFactory : ThreadFactory {
 
     }
 
-    override fun newThread(r: Runnable?): Thread? {
+    override fun newThread(r: Runnable?): Thread {
         val t = Thread(group, r, namePrefix, 0)
         if (t.isDaemon) t.isDaemon = false
         if (t.priority != Thread.NORM_PRIORITY) t.priority = Thread.NORM_PRIORITY
