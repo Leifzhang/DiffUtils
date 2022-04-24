@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kronos.diffutil.BaseDiffHelper
-import com.kronos.diffutil.ParcelDiffHelper
 import com.kronos.sample.R
 import com.kronos.sample.databinding.RecyclerItemTestBinding
 import com.kronos.sample.entity.TestEntity

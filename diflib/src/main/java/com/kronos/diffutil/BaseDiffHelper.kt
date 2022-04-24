@@ -2,10 +2,8 @@ package com.kronos.diffutil
 
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.kronos.diffutil.utils.DiffThreadFactory
@@ -13,7 +11,7 @@ import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
+abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, DefaultLifecycleObserver {
 
     internal var itemsCursor: MutableList<T>? = null
     internal var snapshot: MutableList<T>? = null
@@ -78,7 +76,7 @@ abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
     }
 
     override fun <T> getEntity(pos: Int): T? {
-        return if (itemsCursor?.size ?: 0 <= pos || pos < 0) null else itemsCursor?.get(pos) as T
+        return if ((itemsCursor?.size ?: 0) <= pos || pos < 0) null else itemsCursor?.get(pos) as T
     }
 
 
@@ -86,17 +84,15 @@ abstract class BaseDiffHelper<T> : AbstractDiffHelper<T>, LifecycleObserver {
         lifecycleOwner.lifecycle.addObserver(this)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
         mBackgroundThreadExecutor.shutdown()
     }
 }
 
-private class MainThreadExecutor internal constructor() : Executor {
-    val mHandler = Handler(Looper.getMainLooper())
+private class MainThreadExecutor : Executor {
+    private val mHandler = Handler(Looper.getMainLooper())
 
     override fun execute(command: Runnable) {
         mHandler.post(command)
     }
-
 }
