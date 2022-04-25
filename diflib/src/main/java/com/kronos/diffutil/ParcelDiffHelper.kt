@@ -8,24 +8,25 @@ import java.util.concurrent.CopyOnWriteArrayList
 class ParcelDiffHelper<T : Parcelable> : BaseDiffHelper<T>() {
 
     override fun clone() {
-        try {
-            itemsCursor?.apply {
-                snapshot = CopyOnWriteArrayList()
-                for (entity in this) {
-                    val parcel = Parcel.obtain()
-                    (entity as Parcelable).writeToParcel(parcel, 0)
-                    parcel.setDataPosition(0)
-                    val constructor = entity.javaClass.getDeclaredConstructor(Parcel::class.java)
-                    constructor.isAccessible = true
-                    val dateEntity = constructor.newInstance(parcel) as T
-                    snapshot?.add(dateEntity)
-                    parcel.recycle()
-                }
+        itemsCursor?.run {
+            snapshot = CopyOnWriteArrayList()
+            forEach {
+                snapshot?.add(it.deepCopy() ?: it)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
+    private fun <T : Parcelable> T.deepCopy(): T? {
+        var parcel: Parcel? = null
+        return try {
+            parcel = Parcel.obtain().also {
+                it.writeParcelable(this, 0)
+                it.setDataPosition(0)
+            }
+            parcel.readParcelable(this::class.java.classLoader)
+        } finally {
+            parcel?.recycle()
+        }
+    }
 }
 
